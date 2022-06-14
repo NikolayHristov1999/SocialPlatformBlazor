@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using SocialPlatformBlazor.Models;
 using SocialPlatformBlazor.Server.Data;
-using SocialPlatformBlazor.Server.Models;
+using Microsoft.AspNetCore.Identity;
+using SocialPlatformBlazor.Interfaces;
+using SocialPlatformBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +15,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequireDigit = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireUppercase = false;
+    options.User.RequireUniqueEmail = true;
+    }
+).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentityServer()
     .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
@@ -23,6 +34,7 @@ builder.Services.AddAuthentication()
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Services.AddTransient<IUploadFileService, UploadFileService>();
 
 var app = builder.Build();
 

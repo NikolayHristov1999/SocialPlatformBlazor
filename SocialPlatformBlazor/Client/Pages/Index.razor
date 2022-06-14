@@ -1,4 +1,8 @@
 ﻿@page "/"
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using SocialPlatformBlazor.Shared.ViewModels.Users
+
+@inject HttpClient Http
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +11,6 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+@code{
+}

@@ -1,0 +1,11 @@
+﻿.top-row {
+    height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+.comm-sidebar__title{
+    font-size: 1.1rem;
+    letter-spacing: 1.5px;
+}
+
+@media (min-width: 641px) {
+}

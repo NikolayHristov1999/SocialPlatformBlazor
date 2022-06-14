@@ -1,18 +1,89 @@
 ﻿@inherits LayoutComponentBase
 
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using System.Security.Claims
+@using SocialPlatformBlazor.Shared.ViewModels.Users
+
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject HttpClient Http
+
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
-    </div>
+        <NavMenu BaseUserInfo=baseUserData />
+        @if (baseUserData != null)
+        {
 
+        }
+
+    </div>
     <main>
         <div class="top-row px-4 auth">
-            <LoginDisplay />
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <AuthorizeView>
+                <Authorized>
+                    Hello, @context.User?.Identity?.Name!
+                    <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
+                </Authorized>
+                <NotAuthorized>
+                    <LoginDisplay />
+                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                </NotAuthorized>
+            </AuthorizeView>
         </div>
 
-        <article class="content px-4">
+
+        <section id="content" class="px-4">
             @Body
-        </article>
+            <AuthorizeView>
+                <Authorized>
+                </Authorized>
+            </AuthorizeView>
+
+        </section>
+
     </main>
+
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar comm-sidebar">
+                <CommunicationSidebar />
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+
+
 </div>
+
+@code {
+    private BaseUserInfoModel? baseUserData;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity.IsAuthenticated)
+        {
+            try
+            {
+                baseUserData = await Http.GetFromJsonAsync<BaseUserInfoModel>("users");
+            }
+            catch (AccessTokenNotAvailableException exception)
+            {
+                exception.Redirect();
+            }
+        }
+
+    }
+
+    private async Task BeginLogout(MouseEventArgs args)
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
+    }
+
+
+
+}
