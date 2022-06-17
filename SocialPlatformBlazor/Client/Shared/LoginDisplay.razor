@@ -10,8 +10,8 @@
         <button class="nav-link btn btn-link" @onclick="BeginSignOut">Log out</button>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/register">Register</a>
-        <a href="authentication/login">Log in</a>
+        <a href="javascript:void(0)" @onclick="RedirectToRegister">Register</a>
+        <a href="javascript:void(0)" @onclick="RedirectToLogin">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
 
@@ -20,5 +20,13 @@
     {
         await SignOutManager.SetSignOutState();
         Navigation.NavigateTo("authentication/logout");
+    }
+    private async void RedirectToLogin()
+    {
+        Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+    }
+    private async void RedirectToRegister()
+    {
+        Navigation.NavigateTo($"authentication/register?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
     }
 }

@@ -10,16 +10,13 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient Http
 
+<HeaderNav />
 <div class="page">
-    <div class="sidebar">
+
+    <div class="sidebar col-md-3">
         <NavMenu BaseUserInfo=baseUserData />
-        @if (baseUserData != null)
-        {
-
-        }
-
     </div>
-    <main>
+    <main class="col-md-6">
         <div class="top-row px-4 auth">
             <AuthorizeView>
                 <Authorized>
@@ -34,48 +31,39 @@
         </div>
 
 
-        <section id="content" class="px-4">
+        <section id="content" class="mx-auto px-1">
             @Body
-            <AuthorizeView>
-                <Authorized>
-                </Authorized>
-            </AuthorizeView>
-
         </section>
 
     </main>
 
-    <AuthorizeView>
-        <Authorized>
-            <div class="sidebar comm-sidebar">
-                <CommunicationSidebar />
-            </div>
-        </Authorized>
-    </AuthorizeView>
+    <div class="sidebar comm-sidebar col-md-3">
+        <CommunicationSidebar />
+    </div>
 
 
 
 </div>
 
 @code {
+
     private BaseUserInfoModel? baseUserData;
 
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        if (user.Identity.IsAuthenticated)
-        {
-            try
-            {
-                baseUserData = await Http.GetFromJsonAsync<BaseUserInfoModel>("users");
-            }
-            catch (AccessTokenNotAvailableException exception)
-            {
-                exception.Redirect();
-            }
-        }
+        await PopulateUserData();
+    }
 
+    private async Task PopulateUserData()
+    {
+        try
+        {
+            baseUserData = await Http.GetFromJsonAsync<BaseUserInfoModel>("users");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
     }
 
     private async Task BeginLogout(MouseEventArgs args)

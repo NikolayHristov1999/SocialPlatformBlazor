@@ -13,9 +13,8 @@
 
 .oi {
     width: 2rem;
-    font-size: 1.1rem;
-    vertical-align: text-top;
-    top: -2px;
+    font-size: 1.3rem;
+    text-align:center;
 }
 
 .nav-item {
@@ -49,7 +48,18 @@
     background-color: rgba(255,255,255,0.1);
     color: white;
 }
+.image-width-nav-sidebar{
+    width: 35px;
+    margin-right: 10px;
 
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.icons-width-nav-sidebar{
+
+}
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;
@@ -60,3 +70,4 @@
         display: block;
     }
 }
+

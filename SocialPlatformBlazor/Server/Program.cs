@@ -6,6 +6,8 @@ using SocialPlatformBlazor.Server.Data;
 using Microsoft.AspNetCore.Identity;
 using SocialPlatformBlazor.Interfaces;
 using SocialPlatformBlazor.Services;
+using SocialPlatformBlazor.Server.Services.Interfaces;
+using SocialPlatformBlazor.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+{
     options.SignIn.RequireConfirmedAccount = false;
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
@@ -23,7 +26,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => {
     options.Password.RequiredLength = 6;
     options.Password.RequireUppercase = false;
     options.User.RequireUniqueEmail = true;
-    }
+}
 ).AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddIdentityServer()
@@ -35,6 +38,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IUploadFileService, UploadFileService>();
+builder.Services.AddTransient<IUserManageService, UserManageService>();
 
 var app = builder.Build();
 

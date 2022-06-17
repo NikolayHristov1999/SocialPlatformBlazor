@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SocialPlatformBlazor.Interfaces;
 using SocialPlatformBlazor.Models;
+using SocialPlatformBlazor.Server.Services.Interfaces;
 using SocialPlatformBlazor.Shared;
 
 namespace SocialPlatformBlazor.Server.Areas.Identity.Pages.Account.Manage
@@ -20,13 +21,16 @@ namespace SocialPlatformBlazor.Server.Areas.Identity.Pages.Account.Manage
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IUploadFileService uploadFileService;
+        private readonly IUserManageService userManageService;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IUploadFileService uploadFileService)
+            IUploadFileService uploadFileService,
+            IUserManageService userManageService)
         {
             this.uploadFileService = uploadFileService;
+            this.userManageService = userManageService;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -70,6 +74,10 @@ namespace SocialPlatformBlazor.Server.Areas.Identity.Pages.Account.Manage
 
             [Display(Name = "Background number")]
             public IFormFile BackgroundImage { get; set; }
+
+            public string MainImagePath { get; set; }
+
+            public string BackgroundImagePath { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -81,7 +89,9 @@ namespace SocialPlatformBlazor.Server.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                BackgroundImagePath = user.BackgroundImagePath,
+                MainImagePath = user.MainImagePath
             };
         }
 
@@ -116,13 +126,16 @@ namespace SocialPlatformBlazor.Server.Areas.Identity.Pages.Account.Manage
             if (Input.ProfileImage != null)
             {
                 var path = Path.Combine(GlobalConstants.UsersFileRootFolder, userPath + "main/");
-                await uploadFileService.UploadFileAsync(Input.ProfileImage, path);
+                var pathToFile = await uploadFileService.UploadFileAsync(Input.ProfileImage, path);
+                user.MainImagePath = pathToFile.Substring("wwwroot".Length);
             }
             if (Input.BackgroundImage != null)
             {
                 var path = Path.Combine(GlobalConstants.UsersFileRootFolder, userPath + "background/");
-                await uploadFileService.UploadFileAsync(Input.BackgroundImage, path);
+                var pathToFile = await uploadFileService.UploadFileAsync(Input.BackgroundImage, path);
+                user.BackgroundImagePath = pathToFile.Substring("wwwroot".Length);
             }
+            await userManageService.UpdateAsync(user);
             
 
             if (Input.PhoneNumber != phoneNumber)

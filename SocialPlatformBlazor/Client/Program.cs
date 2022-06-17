@@ -14,5 +14,6 @@ builder.Services.AddHttpClient("SocialPlatformBlazor.ServerAPI", client => clien
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("SocialPlatformBlazor.ServerAPI"));
 
 builder.Services.AddApiAuthorization();
+builder.Services.AddAuthorizationCore();
 
 await builder.Build().RunAsync();

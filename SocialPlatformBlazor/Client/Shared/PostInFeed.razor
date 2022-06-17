@@ -1,0 +1,35 @@
+﻿
+<article class="post-article">
+    <header class="post-article-header">
+        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" width="50">
+        <div class="post-article-header-info">
+            <h2 class="post-article-header-username">{{post?.createdByUser?.username}}</h2>
+            <p class="post-article-header-creation-date">{{post?.created_at | date:'short'}}</p>
+        </div>
+        <div class="post-article-header-end">
+            <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+        </div>
+
+    </header>
+    <hr class="divider">
+    <div class="post-article-content">
+        {{post?.content}}
+    </div>
+    <hr class="divider">
+    <div class="posts-interaction-info">
+        <div class="likes">
+            <button class="btn btn-like-post">
+               <i class="fa-regular fa-thumbs-up fs-4"></i> 
+            </button>
+            Likes: {{post?.likesCount}}
+        </div>
+        
+        Comments: {{post?.commentsCount}}
+    </div>
+</article>
+
+@code {
+
+}

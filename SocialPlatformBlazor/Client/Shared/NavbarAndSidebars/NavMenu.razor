@@ -1,0 +1,62 @@
+﻿@using SocialPlatformBlazor.Shared.ViewModels.Users
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+
+        <a class="navbar-brand" href="">SPB</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item">
+            <NavLink class="nav-link" href="/identity/account/manage" Match="NavLinkMatch.All">
+                <span class="image-width-nav-sidebar">
+                    <img class="nav-link__profile-image mx-auto" src="@(BaseUserInfo?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")">
+                </span>
+                <span class="fw-bold">
+                    @if (BaseUserInfo != null)
+                    {
+                        @(BaseUserInfo != null ? BaseUserInfo.FirstName + " " + BaseUserInfo.LastName : "Nema kak")
+                    }
+                </span>
+
+            </NavLink>
+
+        </div>
+        <div class="nav-item">
+            <NavLink class="nav-link " href="counter">
+                <span class="image-width-nav-sidebar">
+                    <span class="oi oi-plus mx-auto" aria-hidden="true"></span>
+                </span>
+                <span class="fw-bold">Counter</span>
+            </NavLink>
+        </div>
+        <div class="nav-item">
+            <NavLink class="nav-link" href="fetchdata">
+                <span class="image-width-nav-sidebar">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span>
+                </span>
+                <span class="fw-bold">Fetch data</span>
+
+            </NavLink>
+        </div>
+    </nav>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    [Parameter]
+    public BaseUserInfoModel? BaseUserInfo { get; set; }
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+}

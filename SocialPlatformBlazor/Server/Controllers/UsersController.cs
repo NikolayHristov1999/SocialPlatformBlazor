@@ -8,9 +8,9 @@ using System.Security.Claims;
 
 namespace SocialPlatformBlazor.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("[controller]")]
+    [AllowAnonymous]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -21,6 +21,7 @@ namespace SocialPlatformBlazor.Server.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<BaseUserInfoModel>> BasicUserInfo()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

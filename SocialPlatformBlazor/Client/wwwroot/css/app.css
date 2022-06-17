@@ -1,5 +1,6 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('components/components.css');
+@import url('colors.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -65,13 +66,21 @@ a, .btn-link {
     }
 
 
-.comm-sidebar {
-    color: white
+
+.fa-nav-link-width {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+@media (min-width: 781px) {
+    .fa-nav-link-width {
+        width: 150px;
+    }
 }
 
-
-@media (max-width: 900px) {
-    .comm-sidebar{
-        display:none;
+@media (min-width: 1250px) {
+    .fa-nav-link-width {
+        width:200px;
     }
 }
