@@ -48,6 +48,7 @@
 
 .options-nav-bar{
     max-width: 300px;
+    display:flex;
 }
 
 
@@ -55,7 +56,21 @@
     flex:1;
 }
 
+.add-post-btn{
+    border:none;
+}
 
+.image-width-nav-sidebar {
+    width: 35px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+::deep .image-link{
+    padding: 0.2rem 0.25rem;
+}
 
 @media (max-width: 1000px) {
     .options-nav-bar {

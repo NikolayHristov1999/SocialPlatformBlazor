@@ -82,5 +82,13 @@ namespace SocialPlatformBlazor.Server.Controllers
         public void Delete(int id)
         {
         }
+
+        [Route("{id}/likes")]
+        [HttpPost]
+        public async Task<IActionResult> LikePost(string id)
+        {
+            await postsService.LikePostAsync(id, ClaimsPrincipalExtension.GetId(User));
+            return Ok();
+        }
     }
 }

@@ -67,6 +67,7 @@ main {
         height: 100vh;
         position: sticky;
         max-width:300px;
+        top: 65px;
     }
 
     .top-row {

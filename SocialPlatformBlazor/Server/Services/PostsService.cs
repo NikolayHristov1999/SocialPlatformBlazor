@@ -40,5 +40,44 @@ namespace SocialPlatformBlazor.Server.Services
         {
             return db.Posts.OrderByDescending(x => x.CreatedOn).Take(10).ToList();
         }
+
+        /// <summary>
+        ///     Like a post if it is not liked. Otherwise dislike it. Shouldn't be able to like own posts.
+        /// </summary>
+        /// <param name="postId">The id of the post to be liked</param>
+        /// <param name="userId">The user that likes the post</param>
+        /// <returns></returns>
+        public async Task LikePostAsync(string postId, string userId)
+        {
+            var post = await db.Posts.FindAsync(postId);
+            if (post == null || post.OwnerUserId == userId)
+            {
+                return;
+            }
+
+            var postLiked = db.PostsLikes.FirstOrDefault(x => x.PostId == postId && x.UserId == userId);
+
+            if (postLiked == null)
+            {
+                if (post != null) {
+                    postLiked = new PostLike
+                    {
+                        UserId = userId,
+                        PostId = postId,
+                        LikedOn = DateTime.UtcNow
+                    };
+                    await db.PostsLikes.AddAsync(postLiked);
+                    post.Likes++;
+                }
+            }
+            else
+            {
+                db.Remove(postLiked);
+                post.Likes--;
+            }
+
+            db.Posts.Update(post);
+            await db.SaveChangesAsync();
+        }
     }
 }

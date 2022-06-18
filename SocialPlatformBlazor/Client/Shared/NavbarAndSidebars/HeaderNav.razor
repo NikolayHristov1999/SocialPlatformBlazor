@@ -1,12 +1,17 @@
-﻿<header class="header-top">
+﻿@using SocialPlatformBlazor.Shared.ViewModels.Users
+
+@inject NavigationManager NavigationManager
+
+@if(ShowCreateNewPost){
+    <_CreatePost CloseDialog="CloseAddNewPost"/>
+}
+<header class="header-top">
     <nav class="header-nav d-flex align-items-center">
         <div class="col-md-3 left-part-header-navbar d-flex align-items-center">
             <a class="logo" href="">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Blazor.png/800px-Blazor.png"
                      class="main-logo" />
             </a>
-
-
             <form class="d-flex me-2">
                 <input class="form-control" type="search" placeholder="Search" name="search" aria-label="Search" />
                 <button class="btn btn-outline-light-gray text-color-gray" type="submit">
@@ -34,11 +39,48 @@
             </ul>
         </div>
         <div class="col-md-3 options-nav-bar">
-            testettttttttttttttttttttttttttttttttttttttttttttt
+            <ul class="nav d-flex align-items-center">
+                <li class="nav-item">
+                    <NavLink class="nav-link d-flex align-items-center image-link" href="/identity/account/manage" Match="NavLinkMatch.All">
+                        <span class="image-width-nav-sidebar">
+                            <img class="nav-link__profile-image mx-auto"
+                                 src="@(BaseUserInfo?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")">
+                        </span>
+                        <span class="fw-bold text-dark">
+                            @(BaseUserInfo?.FirstName)
+                        </span>
+
+                    </NavLink>
+                </li>
+                <li class="nav-item fa-icons-nav-menu ">
+                    <button class="nav-link text-color-dark-blue add-post-btn" @onclick="ShowAddNewPost">
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </button>
+                </li>
+            </ul>
+
         </div>
     </nav>
 </header>
 
 @code {
+
+    private bool ShowCreateNewPost { get; set; } = false;
+
+    [CascadingParameter(Name = "UserData")]
+    public BaseUserInfoModel? BaseUserInfo { get; set; }
+
+
+    private void ShowAddNewPost()
+    {
+        ShowCreateNewPost = true;
+        //NavigationManager.NavigateTo("/create-post");
+    }
+
+    private void CloseAddNewPost()
+    {
+        ShowCreateNewPost = false;
+    }
+
 
 }

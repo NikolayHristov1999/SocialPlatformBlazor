@@ -1,5 +1,7 @@
 ﻿@using SocialPlatformBlazor.Shared.ViewModels.Posts
 
+@inject PostsService PostsService
+
 @if (Post != null)
 {
     <article class="post-article">
@@ -21,13 +23,13 @@
         </header>
         <hr class="divider">
         <div class="post-article-content">
-            @(Post.Description)
+            @((MarkupString)(Post.Description ?? ""))
             
         </div>
         <hr class="divider">
         <div class="posts-interaction-info">
             <div class="likes">
-                <button class="btn btn-like-post">
+                <button class="btn btn-like-post" @onclick="(e) => (LikePost(e, Post.Id))">
                     <i class="fa-regular fa-thumbs-up fs-4"></i>
                 </button>
                 Likes: @Post.Likes
@@ -41,4 +43,15 @@
 @code {
     [Parameter]
     public PostInFeedViewModel? Post { get; set; }
+
+    /// <summary>
+    ///     Should be one level above because otherwise this method is create every time the component is called
+    /// </summary>
+    /// <param name="mouseEventArgs"></param>
+    /// <param name="postId"></param>
+    /// <returns></returns>
+    private async Task LikePost(MouseEventArgs mouseEventArgs, string postId)
+    {
+        await PostsService.LikeOrDislikePost(postId);
+    }
 }

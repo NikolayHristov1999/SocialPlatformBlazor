@@ -47,7 +47,7 @@
 @code {
     private bool collapseNavMenu = true;
 
-    [Parameter]
+    [CascadingParameter(Name = "UserData")]
     public BaseUserInfoModel? BaseUserInfo { get; set; }
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;

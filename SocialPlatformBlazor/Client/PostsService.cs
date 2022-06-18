@@ -8,7 +8,7 @@ namespace SocialPlatformBlazor.Client
     {
         private readonly HttpClient httpClient;
 
-        public bool ShowingCreateNewPostDialog { get; set; }
+        public bool ShowingCreateNewPostDialog { get; set; } = false;
 
         public int MyProperty { get; set; }
 
@@ -26,7 +26,7 @@ namespace SocialPlatformBlazor.Client
 
         public void CloseCreateNewPostDialog()
         {
-
+            ShowingCreateNewPostDialog = false;
         }
 
         public CreateNewPostModel InitCreateNewPostModel()
@@ -53,6 +53,11 @@ namespace SocialPlatformBlazor.Client
                 return postsRecieved;
             }
             return new List<PostInFeedViewModel>();
+        }
+
+        public async Task LikeOrDislikePost(string postId)
+        {
+            await httpClient.PostAsync($"/api/posts/{postId}/likes", null);
         }
     }
 }
