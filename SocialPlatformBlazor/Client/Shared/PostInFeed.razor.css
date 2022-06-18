@@ -2,7 +2,7 @@
 
 .post-article {
     border-radius: 10px;
-    background-color: rgb(234, 234, 234);
+    background-color: rgb(242, 242, 242);
     padding: 5px 10px;
     border: 1px solid rgb(219, 217, 217);
     width: 100%;
@@ -12,15 +12,23 @@
 .post-article-header {
     height: 58px;
     display: flex;
+    align-items: center;
 }
 
-    .post-article-header img {
-        margin: 4px;
-        border-radius: 50%;
-    }
+.post-header-img-container {
+    height: 50px;
+}
+
+.post-article-header img {
+    border-radius: 50%;
+    height: 100%;
+}
 
 .post-article-header-info {
     width: 80%;
+    align-items: center;
+    padding-left: 10px;
+    padding-top:5px;
 }
 
 .post-article-header-username {
@@ -66,7 +74,6 @@
     align-items: center;
 }
 
-.btn-like-post:hover{
-    background-color: rgb(245, 245, 245);
-}
-
+    .btn-like-post:hover {
+        background-color: rgb(245, 245, 245);
+    }

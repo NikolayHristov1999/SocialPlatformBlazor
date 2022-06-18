@@ -10,40 +10,41 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject HttpClient Http
 
-<HeaderNav />
-<div class="page">
+<CascadingValue Value="@baseUserData" Name="UserData">
+    <HeaderNav />
+    <div class="page">
 
-    <div class="sidebar col-md-3">
-        <NavMenu BaseUserInfo=baseUserData />
-    </div>
-    <main class="col-md-6">
-        <div class="top-row px-4 auth">
-            <AuthorizeView>
-                <Authorized>
-                    Hello, @context.User?.Identity?.Name!
-                    <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
-                </Authorized>
-                <NotAuthorized>
-                    <LoginDisplay />
-                    <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-                </NotAuthorized>
-            </AuthorizeView>
+        <div class="sidebar col-md-3">
+            <NavMenu BaseUserInfo=baseUserData />
         </div>
+        <main class="col-md-6">
+            <div class="top-row px-4 auth">
+                <AuthorizeView>
+                    <Authorized>
+                        Hello, @context.User?.Identity?.Name!
+                        <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
+                    </Authorized>
+                    <NotAuthorized>
+                        <LoginDisplay />
+                        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
 
 
-        <section id="content" class="mx-auto px-1">
-            @Body
-        </section>
+            <section id="content" class="mx-auto px-1">
+                @Body
+            </section>
 
-    </main>
+        </main>
 
-    <div class="sidebar comm-sidebar col-md-3">
-        <CommunicationSidebar />
+        <div class="sidebar comm-sidebar col-md-3">
+            <CommunicationSidebar />
+        </div>
     </div>
+</CascadingValue>
 
 
-
-</div>
 
 @code {
 

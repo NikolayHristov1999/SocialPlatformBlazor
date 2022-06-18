@@ -3,6 +3,7 @@
 using SocialPlatformBlazor.Models;
 using SocialPlatformBlazor.Server.Data;
 using SocialPlatformBlazor.Server.Services.Interfaces;
+using SocialPlatformBlazor.Shared.ViewModels.Users;
 
 namespace SocialPlatformBlazor.Server.Services
 {
@@ -15,7 +16,7 @@ namespace SocialPlatformBlazor.Server.Services
         {
             this._db = _db;
         }
-
+        
         public async Task UpdateAsync(ApplicationUser user) 
         {
             _db.Users.Update(user);

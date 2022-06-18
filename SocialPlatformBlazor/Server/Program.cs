@@ -39,6 +39,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<IUploadFileService, UploadFileService>();
 builder.Services.AddTransient<IUserManageService, UserManageService>();
+builder.Services.AddTransient<IPostsService, PostsService>();
 
 var app = builder.Build();
 

@@ -1,35 +1,44 @@
-﻿
-<article class="post-article">
-    <header class="post-article-header">
-        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png" width="50">
-        <div class="post-article-header-info">
-            <h2 class="post-article-header-username">{{post?.createdByUser?.username}}</h2>
-            <p class="post-article-header-creation-date">{{post?.created_at | date:'short'}}</p>
-        </div>
-        <div class="post-article-header-end">
-            <button mat-icon-button aria-label="Example icon button with a vertical three dot icon">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </div>
+﻿@using SocialPlatformBlazor.Shared.ViewModels.Posts
 
-    </header>
-    <hr class="divider">
-    <div class="post-article-content">
-        {{post?.content}}
-    </div>
-    <hr class="divider">
-    <div class="posts-interaction-info">
-        <div class="likes">
-            <button class="btn btn-like-post">
-               <i class="fa-regular fa-thumbs-up fs-4"></i> 
-            </button>
-            Likes: {{post?.likesCount}}
+@if (Post != null)
+{
+    <article class="post-article">
+        <header class="post-article-header">
+            <div class="post-header-img-container">
+                <img src="@(Post.OwnerUserMainImagePath ?? "/images/blank-profile-picture-973460_1280.png")">
+            </div>
+
+            <div class="post-article-header-info">
+                <h2 class="post-article-header-username">@Post.OwnerUserFullName</h2>
+                <span class="post-article-header-creation-date">@Post.CreatedOn</span>
+            </div>
+            <div class="post-article-header-end">
+                <button  class="btn">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+            </div>
+
+        </header>
+        <hr class="divider">
+        <div class="post-article-content">
+            @(Post.Description)
+            
         </div>
-        
-        Comments: {{post?.commentsCount}}
-    </div>
-</article>
+        <hr class="divider">
+        <div class="posts-interaction-info">
+            <div class="likes">
+                <button class="btn btn-like-post">
+                    <i class="fa-regular fa-thumbs-up fs-4"></i>
+                </button>
+                Likes: @Post.Likes
+            </div>
+
+            Comments: Opa
+        </div>
+    </article>
+}
 
 @code {
-
+    [Parameter]
+    public PostInFeedViewModel? Post { get; set; }
 }

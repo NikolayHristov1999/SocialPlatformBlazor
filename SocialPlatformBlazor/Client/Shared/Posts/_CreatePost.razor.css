@@ -1,0 +1,46 @@
+﻿.create-post {
+    border: 1px solid #d6d5d5;
+    border-radius: 10px;
+    border-collapse: collapse;
+}
+.create-post__header {
+    text-align: center;
+    padding: 10px 0px 0px 0px;
+    align-content: center;
+}
+
+.user-info {
+    height: 60px;
+}
+
+.profile-image {
+    height: 100%;
+    border-radius: 50%;
+}
+
+.create-post__image-container {
+    height: 50px;
+    margin: 5px 10px 5px 5px;
+}
+
+
+.submit-post-button {
+    width: 100%;
+    text-align: center;
+}
+
+.subtim-btn-container{
+    padding: 10px;
+}
+
+::deep .post-description-input {
+    margin: 10px 0px;
+    height: 200px;
+    border-radius: 0px;
+    border-collapse: collapse;
+}
+::deep .form-select {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    font-size: 14px;
+}

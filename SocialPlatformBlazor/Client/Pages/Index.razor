@@ -1,18 +1,33 @@
 ﻿@page "/"
+
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using SocialPlatformBlazor.Shared.ViewModels.Posts
 @using SocialPlatformBlazor.Shared.ViewModels.Users
 
-@inject HttpClient Http
+@inject PostsService postsService
 
-<PageTitle>SPB - Newsfeed</PageTitle>
+<div>
+    <PageTitle>SPB - Newsfeed</PageTitle>
 
-<h1>Hello, world!</h1>
+    <h1>Hello, world!</h1>
 
-Welcome to your new app.
+    Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?" />
-<PostInFeed/>
-<PostInFeed/>
+    <SurveyPrompt Title="How is Blazor working for you?" />
+    @if (Posts != null)
+    {
+        @foreach (var post in Posts)
+        {
+            <PostInFeed Post="post" />
+        }
+    }
 
-@code{
+</div>
+@code {
+    private IEnumerable<PostInFeedViewModel>? Posts { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Posts = await postsService.LoadPostsAsync();
+    }
 }
