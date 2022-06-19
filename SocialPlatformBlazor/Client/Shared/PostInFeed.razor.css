@@ -67,7 +67,28 @@
 
 .post-article-content {
     margin: 10px 6px;
+    overflow:hidden;
+    overflow-wrap: break-word;
 }
+.wrapped-description {
+    max-height: 250px;
+    overflow: hidden;
+}
+.unwrapped-description {
+    max-height: 7500px;
+    overflow: hidden;
+}
+.toggle-show-more-button {
+    border: none;
+    color: rgb(33, 125, 213);
+    background-color: transparent;
+}
+
+.link-to-profile{
+    text-decoration: none;
+    color: black;
+}
+
 
 .btn-like-post {
     color: rgb(107, 180, 251);

@@ -18,6 +18,8 @@ namespace SocialPlatformBlazor.Shared.ViewModels.Posts
 
         public string? OwnerUserMainImagePath { get; set; }
 
+        public string? OwnerUserUsername { get; set; }
+
         public DateTime CreatedOn { get; set; }
 
         public string? SharedPostId { get; set; }
@@ -25,5 +27,7 @@ namespace SocialPlatformBlazor.Shared.ViewModels.Posts
         public int Likes { get; set; }
 
         public int Shares { get; set; }
+
+        public bool IsLiked { get; set; }
     }
 }

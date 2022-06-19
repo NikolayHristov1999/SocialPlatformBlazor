@@ -1,21 +1,27 @@
 ﻿@using SocialPlatformBlazor.Shared.ViewModels.Posts
+@using SocialPlatformBlazor.Client.Services
 
 @inject PostsService PostsService
+@inject IJSRuntime JSRuntime
 
 @if (Post != null)
 {
-    <article class="post-article">
+    <article class="post-article" @ref="ArticleEl">
         <header class="post-article-header">
-            <div class="post-header-img-container">
-                <img src="@(Post.OwnerUserMainImagePath ?? "/images/blank-profile-picture-973460_1280.png")">
-            </div>
+            <a href="/users/@Post.OwnerUserUsername" class="link-to-profile">
+                <div class="post-header-img-container">
+                    <img src="@(Post.OwnerUserMainImagePath ?? "/images/blank-profile-picture-973460_1280.png")">
+                </div>
+            </a>
 
             <div class="post-article-header-info">
-                <h2 class="post-article-header-username">@Post.OwnerUserFullName</h2>
+                <a href="/users/@Post.OwnerUserUsername" class="link-to-profile">
+                    <h2 class="post-article-header-username">@Post.OwnerUserFullName</h2>
+                </a>
                 <span class="post-article-header-creation-date">@Post.CreatedOn</span>
             </div>
             <div class="post-article-header-end">
-                <button  class="btn">
+                <button class="btn">
                     <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>
             </div>
@@ -23,15 +29,54 @@
         </header>
         <hr class="divider">
         <div class="post-article-content">
-            @((MarkupString)(Post.Description ?? ""))
-            
+            @if (Post.Description?.Length > 150)
+            {
+                @if (!showMore)
+                {
+                    <div class="wrapped-description">
+                        @((MarkupString)(Post.Description.Substring(0,150)))
+                    </div>
+                    <button class="toggle-show-more-button" @onclick="ToggleShowMoreAsync">
+                        Show more...
+                    </button>
+                }
+                else
+                {
+                    <div class="unwrapped-description">
+                        @((MarkupString)(Post.Description))
+                    </div>
+
+                    <button class="toggle-show-more-button" @onclick="ToggleShowMoreAsync">
+                        Show less
+                    </button>
+
+                }
+            }
+            else
+            {
+                @((MarkupString)(Post.Description ?? ""))
+            }
         </div>
         <hr class="divider">
         <div class="posts-interaction-info">
             <div class="likes">
                 <button class="btn btn-like-post" @onclick="(e) => (LikePost(e, Post.Id))">
-                    <i class="fa-regular fa-thumbs-up fs-4"></i>
+
+                    @if (Post.IsLiked)
+                    {
+                        <span>
+                            <i class="fa-solid fa-thumbs-up fs-4"></i>
+                        </span>
+                    }
+                    else
+                    {
+                        <span>
+                            <i class="fa-regular fa-thumbs-up fs-4"></i>
+                        </span>
+                    }
                 </button>
+
+
                 Likes: @Post.Likes
             </div>
 
@@ -41,8 +86,14 @@
 }
 
 @code {
+    private bool showMore = false;
+
     [Parameter]
     public PostInFeedViewModel? Post { get; set; }
+
+    public string ShortDescription { get; set; }
+
+    public ElementReference ArticleEl { get; set; }
 
     /// <summary>
     ///     Should be one level above because otherwise this method is create every time the component is called
@@ -50,8 +101,32 @@
     /// <param name="mouseEventArgs"></param>
     /// <param name="postId"></param>
     /// <returns></returns>
+    ///
     private async Task LikePost(MouseEventArgs mouseEventArgs, string postId)
     {
         await PostsService.LikeOrDislikePost(postId);
+        if (Post.IsLiked)
+        {
+            Post.Likes--;
+        }
+        else
+        {
+            Post.Likes++;
+        }
+        Post.IsLiked = !Post.IsLiked;
+
+        StateHasChanged();
     }
+
+    public async Task ToggleShowMoreAsync()
+    {
+        if (showMore)
+        {
+            await JSRuntime.InvokeVoidAsync("scrollToView", ArticleEl);
+        }
+        showMore = !showMore;
+        StateHasChanged();
+    }
+
+
 }

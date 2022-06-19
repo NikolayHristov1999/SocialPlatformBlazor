@@ -67,8 +67,11 @@
     align-items: center;
     justify-content: center;
 }
-
-::deep .image-link{
+header-nav-first-name{
+    max-width: 100px;
+    text-overflow: ellipsis;
+}
+::deep .image-link {
     padding: 0.2rem 0.25rem;
 }
 

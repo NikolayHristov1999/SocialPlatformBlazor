@@ -60,7 +60,7 @@
     {
         try
         {
-            baseUserData = await Http.GetFromJsonAsync<BaseUserInfoModel>("users");
+            baseUserData = await Http.GetFromJsonAsync<BaseUserInfoModel>("api/users");
         }
         catch (AccessTokenNotAvailableException exception)
         {

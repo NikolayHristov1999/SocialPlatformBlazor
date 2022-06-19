@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/users/{Username}"
 
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using SocialPlatformBlazor.Client.Components
@@ -9,7 +9,12 @@
 @inject PostsService postsService
 
 <div>
-    <PageTitle>SPB - Newsfeed</PageTitle>
+    @if (BasicUserInfo != null)
+    {
+        <PageTitle>
+            @(BasicUserInfo.FirstName + " " + BasicUserInfo.LastName) Profile | SPB
+        </PageTitle>
+    }
 
     <h1>Hello, world!</h1>
 
@@ -23,34 +28,49 @@
             <PostInFeed Post="post" />
         }
     }
-    <InfiniteScrolling ItemsProvider="GetItems">
-        <ItemTemplate Context="item">
-            <PostInFeed Post="item" />
-        </ItemTemplate>
-        <LoadingTemplate>
-            <div>Loading...</div>
-        </LoadingTemplate>
-    </InfiniteScrolling>
+
 </div>
+<InfiniteScrolling ItemsProvider="GetItems">
+    <ItemTemplate Context="item">
+        <PostInFeed Post="item" />
+    </ItemTemplate>
+    <LoadingTemplate>
+        <div>Loading...</div>
+    </LoadingTemplate>
+</InfiniteScrolling>
+
+
 @code {
     private int currentLastPost = 0;
 
     private int loadPostsCount = 10;
 
+    private bool isAllCaughtUp = false;
+
+    [Parameter]
+    public string? Username { get; set; }
+
+    public UserProfileModel BasicUserInfo { get; set; }
+
     private IEnumerable<PostInFeedViewModel>? Posts { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Posts = await postsService.LoadPostsAsync();
-        if (Posts != null)
+        if (Username != null)
         {
+            Posts = await postsService.LoadUserPostsAsync(Username);
             currentLastPost += loadPostsCount;
         }
+
     }
 
     async Task<IEnumerable<PostInFeedViewModel>> GetItems(InfiniteScrollingItemsProviderRequest request)
     {
-        var posts = await postsService.LoadPostsAsync("api/posts", currentLastPost, loadPostsCount);
+        if (Username == null)
+        {
+            return new List<PostInFeedViewModel>();
+        }
+        var posts = await postsService.LoadUserPostsAsync(Username, currentLastPost);
         if (posts != null)
         {
             currentLastPost += loadPostsCount;
@@ -59,4 +79,5 @@
         return new List<PostInFeedViewModel>();
 
     }
+
 }

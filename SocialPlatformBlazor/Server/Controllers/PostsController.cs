@@ -26,10 +26,12 @@ namespace SocialPlatformBlazor.Server.Controllers
         }
         // GET: api/<PostsController>
         [HttpGet]
-        public async Task<IEnumerable<PostInFeedViewModel>> Get()
+        public async Task<IEnumerable<PostInFeedViewModel>> Get(
+            [FromQuery] int lastPostNumber = 0,
+            [FromQuery] int postsCount = 10)
         {
             var postsModel = new List<PostInFeedViewModel>();
-            var posts = postsService.GetLastPostsAsync();
+            var posts = postsService.GetLastPostsAsync(lastPostNumber, postsCount);
             foreach (var post in posts)
             {
                 var ownerUser = await userManager.FindByIdAsync(post.OwnerUserId);
@@ -41,9 +43,12 @@ namespace SocialPlatformBlazor.Server.Controllers
                     OwnerUserId = post.OwnerUserId,
                     OwnerUserFullName = ownerUser.FirstName + " " + ownerUser.LastName,
                     OwnerUserMainImagePath = ownerUser.MainImagePath,
+                    OwnerUserUsername = ownerUser.UserName,
                     Likes = post.Likes,
                     Shares = post.Shares,
-                    SharedPostId = post.SharedPostId
+                    SharedPostId = post.SharedPostId,
+                    IsLiked =  (await postsService
+                        .IsPostLikedByUserAsync(post.Id, ClaimsPrincipalExtension.GetId(User)) != null),
                 });
             }
 

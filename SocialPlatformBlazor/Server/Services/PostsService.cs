@@ -36,9 +36,50 @@ namespace SocialPlatformBlazor.Server.Services
             await db.SaveChangesAsync();
         }
 
-        public IEnumerable<Post> GetLastPostsAsync(int postsCount = 10)
+        /// <summary>
+        ///     Returns the latest posts(ordered by date descending)
+        ///     from start to end(default 0 for start and 10 for posts count)
+        /// </summary>
+        /// <param name="startPost">
+        ///     The number of the post to start (or lastly recieved post)
+        ///     Default is 0
+        /// </param>
+        /// <param name="postsCount">
+        ///     The number of posts to be returned
+        /// </param>
+        /// <returns>Posts</returns>
+        public IEnumerable<Post> GetLastPostsAsync(int startPost = 0, int postsCount = 10)
         {
-            return db.Posts.OrderByDescending(x => x.CreatedOn).Take(10).ToList();
+            return db.Posts
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(startPost)
+                .Take(postsCount)
+                .ToList();
+        }
+
+        /// <summary>
+        ///     Returns the latest posts for a user(ordered by date descending)
+        ///     from start to end(default 0 for start and 10 for posts count)
+        /// </summary>
+        /// <param name="userId">
+        ///     Id of the user that owns the posts
+        /// </param>
+        /// <param name="startPost">
+        ///     The number of the post to start (or lastly recieved post)
+        ///     Default is 0
+        /// </param>
+        /// <param name="postsCount">
+        ///     The number of posts to be returned
+        /// </param>
+        /// <returns>Posts</returns>
+        public IEnumerable<Post> GetLastPostsForUserAsync(string userId, int startPost = 0, int postsCount = 10)
+        {
+            return db.Posts
+                .Where(x => x.OwnerUserId == userId)
+                .OrderByDescending(x => x.CreatedOn)
+                .Skip(startPost)
+                .Take(postsCount)
+                .ToList();
         }
 
         /// <summary>
@@ -55,11 +96,12 @@ namespace SocialPlatformBlazor.Server.Services
                 return;
             }
 
-            var postLiked = db.PostsLikes.FirstOrDefault(x => x.PostId == postId && x.UserId == userId);
+            var postLiked = await IsPostLikedByUserAsync(postId, userId);
 
             if (postLiked == null)
             {
-                if (post != null) {
+                if (post != null)
+                {
                     postLiked = new PostLike
                     {
                         UserId = userId,
@@ -78,6 +120,11 @@ namespace SocialPlatformBlazor.Server.Services
 
             db.Posts.Update(post);
             await db.SaveChangesAsync();
+        }
+
+        public async Task<PostLike?> IsPostLikedByUserAsync(string postId, string userId)
+        {
+            return await db.PostsLikes.FindAsync(postId, userId);
         }
     }
 }

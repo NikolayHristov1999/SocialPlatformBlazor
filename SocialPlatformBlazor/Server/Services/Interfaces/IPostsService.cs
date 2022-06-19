@@ -14,7 +14,36 @@ namespace SocialPlatformBlazor.Server.Services.Interfaces
         /// <returns></returns>
         Task AddPostAsync(CreateNewPostModel postModel, string ownerUserId, string? ownerPageId = null);
 
-        IEnumerable<Post> GetLastPostsAsync(int postsCount = 10);
+        /// <summary>
+        ///     Returns the latest posts(ordered by date descending)
+        ///     from start to end(default 0 for start and 10 for posts count)
+        /// </summary>
+        /// <param name="startPost">
+        ///     The number of the post to start (or lastly recieved post)
+        ///     Default is 0
+        /// </param>
+        /// <param name="postsCount">
+        ///     The number of posts to be returned
+        /// </param>
+        /// <returns>Posts</returns>
+        IEnumerable<Post> GetLastPostsAsync(int startPost = 0, int postsCount = 10);
+
+        /// <summary>
+        ///     Returns the latest posts for a user(ordered by date descending)
+        ///     from start to end(default 0 for start and 10 for posts count)
+        /// </summary>
+        /// <param name="userId">
+        ///     Id of the user that owns the posts
+        /// </param>
+        /// <param name="startPost">
+        ///     The number of the post to start (or lastly recieved post)
+        ///     Default is 0
+        /// </param>
+        /// <param name="postsCount">
+        ///     The number of posts to be returned
+        /// </param>
+        /// <returns>Posts</returns>
+        IEnumerable<Post> GetLastPostsForUserAsync(string userId, int startPost = 0, int postsCount = 10);
 
         /// <summary>
         ///     Like a post if it is not liked. Otherwise dislike it. Shouldn't be able to like own posts.
@@ -23,5 +52,7 @@ namespace SocialPlatformBlazor.Server.Services.Interfaces
         /// <param name="userId">The user that likes the post</param>
         /// <returns></returns>
         Task LikePostAsync(string id, string userId);
+
+        Task<PostLike?> IsPostLikedByUserAsync(string postId, string userId);
     }
 }
