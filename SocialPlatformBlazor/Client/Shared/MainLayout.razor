@@ -1,5 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using System.Security.Claims
@@ -8,6 +9,7 @@
 @inject NavigationManager Navigation
 @inject SignOutSessionStateManager SignOutManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize]
 @inject HttpClient Http
 
 <CascadingValue Value="@baseUserData" Name="UserData">
@@ -32,7 +34,7 @@
             </div>
 
 
-            <section id="content" class="mx-auto px-1">
+            <section id="content" class="mx-auto px-3">
 
                 @Body
             </section>

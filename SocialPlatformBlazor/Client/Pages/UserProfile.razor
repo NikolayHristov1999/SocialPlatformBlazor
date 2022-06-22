@@ -7,62 +7,91 @@
 @using SocialPlatformBlazor.Client.Services
 
 @inject PostsService postsService
+@inject UserService userService
 
-<div>
-    @if (BasicUserInfo != null)
+<div class="mx-auto">
+    <PageTitle>User Profile | SPB</PageTitle>
+    @if (UserProfileModel != null)
     {
-        <PageTitle>
-            @(BasicUserInfo.FirstName + " " + BasicUserInfo.LastName) Profile | SPB
-        </PageTitle>
+        <div class="user-profile-images-container">
+            <div class="background-image-container">
+                <span>
+                    <img src="@(UserProfileModel.BackgroundImagePath ?? "/images/default-background-image.png")"
+                     class="user-profile-images background-profile-image" />
+                </span>
+            </div>
+            <div class="main-image-container mx-auto">
+                <span class="span-main-image-container">
+                    <img src="@(UserProfileModel.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")"
+                     class="user-profile-images main-profile-image" />
+                </span>
+            </div>
+
+        </div>
+        <div class="user-profile-user-info">
+            <h1 class="text-center fs-2">@(UserProfileModel.FirstName + " " + UserProfileModel.LastName)</h1>
+            <div class="follow-info">
+                <span class="fs-5 me-3">Followers: @UserProfileModel.Followers</span>
+                @if (LoggedInUserInfo != null && LoggedInUserInfo.UserName != Username)
+                {
+                    <button class="btn btn-primary"
+                    @onclick="() => (FollowOrUnfollowUser(UserProfileModel.UserName))">
+                        @(UserProfileModel.IsFollowed ? "Unfollow" : "Follow")
+                    </button>
+                }
+            </div>
+        </div>
     }
-
-    <h1>Hello, world!</h1>
-
-    Welcome to your new app.
-
-    <SurveyPrompt Title="How is Blazor working for you?" />
-    @if (Posts != null)
-    {
-        @foreach (var post in Posts)
+    <div class="newsfeed">
+        @if (Posts != null)
         {
-            <PostInFeed Post="post" />
+            @foreach (var post in Posts)
+            {
+                <PostInFeed Post="post" />
+            }
         }
-    }
+        <InfiniteScrolling ItemsProvider="GetItems">
+            <ItemTemplate Context="item">
+                <PostInFeed Post="item" />
+            </ItemTemplate>
+            <LoadingTemplate>
+                <div>Loading...</div>
+            </LoadingTemplate>
+        </InfiniteScrolling>
+
+    </div>
 
 </div>
-<InfiniteScrolling ItemsProvider="GetItems">
-    <ItemTemplate Context="item">
-        <PostInFeed Post="item" />
-    </ItemTemplate>
-    <LoadingTemplate>
-        <div>Loading...</div>
-    </LoadingTemplate>
-</InfiniteScrolling>
 
 
 @code {
-    private int currentLastPost = 0;
+    private int currentLastPost = 10;
 
     private int loadPostsCount = 10;
 
     private bool isAllCaughtUp = false;
 
+    [CascadingParameter(Name = "UserData")]
+    public BaseUserInfoModel LoggedInUserInfo { get; set; }
+
     [Parameter]
     public string? Username { get; set; }
 
-    public UserProfileModel BasicUserInfo { get; set; }
+    public UserProfileModel? UserProfileModel { get; set; }
 
     private IEnumerable<PostInFeedViewModel>? Posts { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        if (Username != null)
+        if (UserProfileModel != null && Username == UserProfileModel.UserName)
         {
-            Posts = await postsService.LoadUserPostsAsync(Username);
-            currentLastPost += loadPostsCount;
+            return;
         }
-
-    }
+        this.UserProfileModel = await userService.GetUserProfileAsync(Username);
+        this.Posts = await postsService.LoadUserPostsAsync(Username);
+        Console.WriteLine(UserProfileModel.BackgroundImagePath);
+        StateHasChanged();
+    } 
 
     async Task<IEnumerable<PostInFeedViewModel>> GetItems(InfiniteScrollingItemsProviderRequest request)
     {
@@ -78,6 +107,24 @@
         }
         return new List<PostInFeedViewModel>();
 
+    }
+
+    async Task FollowOrUnfollowUser(string username)
+    {
+        var result = await userService.FollowUserAsync(username);
+        if (result && UserProfileModel != null)
+        {
+            if (UserProfileModel.IsFollowed)
+            {
+                UserProfileModel.Followers--;
+            }
+            else
+            {
+                UserProfileModel.Followers++;
+            }
+            UserProfileModel.IsFollowed = !UserProfileModel.IsFollowed;
+
+        }
     }
 
 }

@@ -21,6 +21,22 @@
                 <span class="post-article-header-creation-date">@Post.CreatedOn</span>
             </div>
             <div class="post-article-header-end">
+                @if (Post.Description?.Length > 150)
+                {
+                    @if (!showMore)
+                    {
+                        <button class="btn" @onclick="ToggleShowMoreAsync">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn" @onclick="ToggleShowMoreAsync">
+                            <i class="fa-solid fa-angle-up"></i>
+                        </button>
+
+                    }
+                }
                 <button class="btn">
                     <i class="fa-solid fa-ellipsis-vertical"></i>
                 </button>

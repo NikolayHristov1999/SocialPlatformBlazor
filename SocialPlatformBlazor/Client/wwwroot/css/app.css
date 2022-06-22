@@ -67,22 +67,4 @@ a, .btn-link {
 
 
 
-.fa-nav-link-width {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-}
-@media (min-width: 781px) {
-    .fa-nav-link-width {
-        width: 150px;
-    }
-}
-
-@media (min-width: 1250px) {
-    .fa-nav-link-width {
-        width:200px;
-    }
-}
-
 

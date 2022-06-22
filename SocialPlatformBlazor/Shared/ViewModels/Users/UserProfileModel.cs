@@ -24,5 +24,7 @@ namespace SocialPlatformBlazor.Shared.ViewModels.Users
         public string? BackgroundImagePath { get; set; }
 
         public int Followers { get; set; }
+
+        public bool IsFollowed { get; set; }
     }
 }

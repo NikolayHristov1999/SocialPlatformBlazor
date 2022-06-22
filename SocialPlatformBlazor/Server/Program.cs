@@ -9,7 +9,8 @@ using SocialPlatformBlazor.Services;
 using SocialPlatformBlazor.Server.Services.Interfaces;
 using SocialPlatformBlazor.Server.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
+
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

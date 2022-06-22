@@ -42,9 +42,15 @@ main {
     }
 
 #content{
-    max-width:600px;
+    max-width:900px;
 }
-@media (max-width: 640.98px) {
+
+::deep .newsfeed{
+    max-width: 600px;
+    margin: auto;
+
+}
+@media (max-width: 765.98px) {
     .top-row:not(.auth) {
         display: none;
     }
@@ -58,7 +64,7 @@ main {
     }
 }
 
-@media (min-width: 641px) {
+@media (min-width: 768px) {
     .page {
         flex-direction: row;
     }
