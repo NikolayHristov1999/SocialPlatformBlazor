@@ -1,0 +1,45 @@
+﻿@if (Show)
+{
+    <div class="dialog-container modal" @onmouseup="OnMouseClick">
+        <div class="@ModelContentClasses" >
+            <div @onmouseout="MouseLeave" @onmouseover="MouseOver">
+                @ChildContent
+            </div>
+            
+        </div>
+    </div>
+}
+@code {
+    [Parameter]
+    public bool Show { get; set; }
+
+    [Parameter] 
+    public EventCallback CloseDialog { get; set; }
+
+
+    [Parameter] 
+    public string ModelContentClasses { get; set; }
+
+    private bool IsMouseOnTarget { get; set; } = false;
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private void MouseLeave()
+    {
+        IsMouseOnTarget = false;
+    }
+
+    private void MouseOver()
+    {
+        IsMouseOnTarget = true;
+    }
+
+    private async Task OnMouseClick()
+    {
+        if (!IsMouseOnTarget)
+        {
+            await CloseDialog.InvokeAsync();
+        }
+    }
+}

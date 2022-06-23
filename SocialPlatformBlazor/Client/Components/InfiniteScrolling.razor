@@ -11,16 +11,23 @@
 {
     @LoadingTemplate
 }
-
+@if (!_moreItemsAvailable)
+{
+    <div class="text-center fs-3">
+        You are all caught up!
+    </div>
+}
 <div @ref="_lastItemIndicator" style="height:1px"></div>
+
 
 @code {
     private List<T> _items = new();
     private ElementReference _lastItemIndicator;
-    private DotNetObjectReference<InfiniteScrolling<T>> _currentComponentReference;
-    private IJSObjectReference _module;
-    private IJSObjectReference _instance;
+    private DotNetObjectReference<InfiniteScrolling<T>>? _currentComponentReference;
+    private IJSObjectReference? _module;
+    private IJSObjectReference? _instance;
     private bool _loading = false;
+    private bool _moreItemsAvailable = true;
     private CancellationTokenSource _loadItemsCts;
 
     [Parameter]
@@ -35,8 +42,10 @@
     [JSInvokable]
     public async Task LoadMoreItems()
     {
-        if (_loading)
+        if (_loading || !_moreItemsAvailable)
+        {
             return;
+        }
 
         _loading = true;
         try
@@ -47,7 +56,14 @@
             try
             {
                 var newItems = await ItemsProvider(new InfiniteScrollingItemsProviderRequest(_items.Count, _loadItemsCts.Token));
-                _items.AddRange(newItems);
+                if (newItems.Count() == 0)
+                {
+                    _moreItemsAvailable = false;
+                }
+                else
+                {
+                    _items.AddRange(newItems);
+                }
             }
             catch (OperationCanceledException oce) when (oce.CancellationToken == _loadItemsCts.Token)
             {

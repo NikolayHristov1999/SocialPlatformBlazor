@@ -8,56 +8,53 @@
 @inject HttpClient http
 @inject NavigationManager NavigationManager
 
-<div class="dialog-container modal" @onmouseup="OnMouseClick">
-    <div class="modal-content">
-        <div class="create-post modal-post" @onmouseout="MouseLeave" @onmouseover="MouseOver" >
-            <div class="create-post__header">
-                <h3>Create Post</h3>
-            </div>
-            <hr />
-            @if (CreateNewPostModel != null)
-            {
-                <EditForm Model="CreateNewPostModel" OnValidSubmit="AddPostAsync">
-                    <DataAnnotationsValidator />
-                    <div class="user-info d-flex">
-                        <div class="create-post__image-container">
-                            <img class="profile-image" src="@(BaseUserInfo?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")">
-                        </div>
-
-
-                        <div>
-                            <div>
-                                @(BaseUserInfo?.FirstName + " " + BaseUserInfo?.LastName)
-                            </div>
-                            <div>
-                                <InputSelect @bind-Value="CreateNewPostModel.VisibilityType" class="form-select " id="visibilityType">
-                                    @foreach (VisibilityType vtype in Enum.GetValues(typeof(VisibilityType)))
-                                    {
-                                    <option value="@vtype.ToString()">@vtype.ToString()</option>
-                                    }
-                            </InputSelect>
-                            <ValidationMessage For="@(() => CreateNewPostModel.VisibilityType)" />
-                        </div>
-
-
-                    </div>
-
-                </div>
-                <hr />
-                <Editor ScriptSrc="lib/tinymce/tinymce.min.js"
-                        Field="() => CreateNewPostModel.Description"
-                        @bind-Value="CreateNewPostModel.Description"
-                        ValidationOnInput="@true" />
-                <ValidationMessage For="@(() => CreateNewPostModel.Description)" />
-                <hr />
-                <div class="subtim-btn-container">
-                    <button type="submit" class="btn btn-primary submit-post-button">Post</button>
-                </div>
-            </EditForm>
-            }
-        </div>
+<div class="create-post modal-post">
+    <div class="create-post__header">
+        <h3>Create Post</h3>
     </div>
+    <hr />
+    @if (CreateNewPostModel != null)
+    {
+        <EditForm Model="CreateNewPostModel" OnValidSubmit="AddPostAsync">
+            <DataAnnotationsValidator />
+            <div class="user-info d-flex">
+                <div class="create-post__image-container">
+                    <img class="profile-image" src="@(BaseUserInfo?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")">
+                </div>
+
+
+                <div>
+                    <div>
+                        @(BaseUserInfo?.FirstName + " " + BaseUserInfo?.LastName)
+                    </div>
+                    <div>
+                        <InputSelect @bind-Value="CreateNewPostModel.VisibilityType" class="form-select " id="visibilityType">
+                            @foreach (VisibilityType vtype in Enum.GetValues(typeof(VisibilityType)))
+                            {
+                            <option value="@vtype.ToString()">@vtype.ToString()</option>
+                            }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => CreateNewPostModel.VisibilityType)" />
+                </div>
+
+
+            </div>
+
+        </div>
+        <hr />
+        <Editor ScriptSrc="lib/tinymce/tinymce.min.js"
+                Field="() => CreateNewPostModel.Description"
+                @bind-Value="CreateNewPostModel.Description"
+                ValidationOnInput="@true" />
+        <ValidationMessage For="@(() => CreateNewPostModel.Description)" />
+        <hr />
+        <div class="subtim-btn-container">
+            <button type="submit" class="btn btn-primary submit-post-button">Post</button>
+        </div>
+    </EditForm>
+    }
 </div>
+
 
 @code {
     [CascadingParameter(Name = "UserData")]
@@ -66,8 +63,6 @@
     [Parameter] public EventCallback CloseDialog { get; set; }
 
     private CreateNewPostModel? CreateNewPostModel { get; set; }
-
-    private bool IsMouseOnTarget { get; set; } = false;
 
     protected override void OnInitialized()
     {
@@ -84,27 +79,5 @@
         await CloseDialog.InvokeAsync();
         NavigationManager.NavigateTo("/index");
         NavigationManager.NavigateTo("/");
-    }
-
-    private void MouseLeave()
-    {
-         IsMouseOnTarget = false;
-         Console.WriteLine( IsMouseOnTarget);
-    }
-
-    private void MouseOver()
-    {
-        IsMouseOnTarget = true;
-        Console.WriteLine( IsMouseOnTarget);
-    }
-
-    private async Task OnMouseClick()
-    {
-        Console.WriteLine( IsMouseOnTarget);
-        if (!IsMouseOnTarget)
-        {
-            Console.WriteLine("My debug output.");
-            await CloseDialog.InvokeAsync();
-        }
     }
 }

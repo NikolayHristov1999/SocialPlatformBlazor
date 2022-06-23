@@ -9,7 +9,7 @@ namespace SocialPlatformBlazor.Infrastructure
 {
     public static class ClaimsPrincipalExtension
     {
-        public static string GetId(this ClaimsPrincipal user)
-            => user.FindFirstValue(ClaimTypes.NameIdentifier);
+        public static string? GetId(this ClaimsPrincipal user)
+            => user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 }

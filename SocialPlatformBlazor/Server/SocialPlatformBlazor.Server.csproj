@@ -9,14 +9,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ApplicationCore\SocialPlatformBlazor.Interfaces\SocialPlatformBlazor.Interfaces.csproj" />
+    <ProjectReference Include="..\..\ApplicationCore\SocialPlatformBlazor.Models\SocialPlatformBlazor.Models.csproj" />
+    <ProjectReference Include="..\..\ApplicationCore\SocialPlatformBlazor.Services\SocialPlatformBlazor.Services.csproj" />
     <ProjectReference Include="..\..\SocialPlatformBlazor.Infrastructure\SocialPlatformBlazor.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\SocialPlatformBlazor.Interfaces\SocialPlatformBlazor.Interfaces.csproj" />
-    <ProjectReference Include="..\..\SocialPlatformBlazor.Services\SocialPlatformBlazor.Services.csproj" />
     <ProjectReference Include="..\Client\SocialPlatformBlazor.Client.csproj" />
     <ProjectReference Include="..\Shared\SocialPlatformBlazor.Shared.csproj" />
   </ItemGroup>

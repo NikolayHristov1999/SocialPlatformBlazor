@@ -1,10 +1,13 @@
-﻿@using SocialPlatformBlazor.Shared.ViewModels.Users
+﻿@using SocialPlatformBlazor.Client.Components
+@using SocialPlatformBlazor.Shared.ViewModels.Users
 
 @inject NavigationManager NavigationManager
 
-@if(ShowCreateNewPost){
+<TemplateDialog Show="ShowCreateNewPost"
+                CloseDialog="CloseAddNewPost"
+                ModelContentClasses="modal-content">
     <_CreatePost CloseDialog="CloseAddNewPost"/>
-}
+</TemplateDialog>
 <header class="header-top">
     <nav class="header-nav d-flex align-items-center">
         <div class="col-md-3 left-part-header-navbar d-flex align-items-center">
@@ -74,7 +77,6 @@
     private void ShowAddNewPost()
     {
         ShowCreateNewPost = true;
-        //NavigationManager.NavigateTo("/create-post");
     }
 
     private void CloseAddNewPost()

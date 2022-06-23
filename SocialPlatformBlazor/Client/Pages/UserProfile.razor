@@ -100,6 +100,7 @@
             return new List<PostInFeedViewModel>();
         }
         var posts = await postsService.LoadUserPostsAsync(Username, currentLastPost);
+
         if (posts != null)
         {
             currentLastPost += loadPostsCount;

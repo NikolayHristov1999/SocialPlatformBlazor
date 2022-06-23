@@ -14,6 +14,9 @@
         }
     }, options);
 
+    if (lastItemIndicator == null) {
+        return;
+    }
     observer.observe(lastItemIndicator);
 
     // Allow to cleanup resources when the Razor component is removed from the page

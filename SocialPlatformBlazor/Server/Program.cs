@@ -5,9 +5,9 @@ using SocialPlatformBlazor.Models;
 using SocialPlatformBlazor.Server.Data;
 using Microsoft.AspNetCore.Identity;
 using SocialPlatformBlazor.Interfaces;
-using SocialPlatformBlazor.Services;
 using SocialPlatformBlazor.Server.Services.Interfaces;
 using SocialPlatformBlazor.Server.Services;
+using SocialPlatformBlazor.Services;
 
 var builder = WebApplication.CreateBuilder();
 
