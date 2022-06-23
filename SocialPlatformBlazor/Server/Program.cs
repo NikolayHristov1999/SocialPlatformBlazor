@@ -8,6 +8,7 @@ using SocialPlatformBlazor.Interfaces;
 using SocialPlatformBlazor.Server.Services.Interfaces;
 using SocialPlatformBlazor.Server.Services;
 using SocialPlatformBlazor.Services;
+using SocialPlatformBlazor.Server.Hubs;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -42,9 +43,18 @@ builder.Services.AddTransient<IUploadFileService, UploadFileService>();
 builder.Services.AddTransient<IUserManageService, UserManageService>();
 builder.Services.AddTransient<IPostsService, PostsService>();
 
+builder.Services.AddSignalR();
+builder.Services.AddResponseCompression(opts =>
+{
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/octet-stream" });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseResponseCompression();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -71,6 +81,8 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();
+
+app.MapHub<ChatHub>("/chathub");
 app.MapFallbackToFile("index.html");
 
 app.Run();
