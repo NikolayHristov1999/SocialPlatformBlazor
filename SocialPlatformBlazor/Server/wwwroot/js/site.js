@@ -8,3 +8,11 @@ function scrollToView(elem) {
         elem.scrollIntoView();
     }
 }
+
+function scrollToLastChild(el) {
+    if (el) {
+        el.lastElementChild.scrollIntoView();
+        console.log("test");
+    }
+    
+}

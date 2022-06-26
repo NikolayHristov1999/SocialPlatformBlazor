@@ -9,6 +9,9 @@ using SocialPlatformBlazor.Server.Services.Interfaces;
 using SocialPlatformBlazor.Server.Services;
 using SocialPlatformBlazor.Services;
 using SocialPlatformBlazor.Server.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -36,6 +39,10 @@ builder.Services.AddIdentityServer()
 
 builder.Services.AddAuthentication()
     .AddIdentityServerJwt();
+builder.Services.TryAddEnumerable(
+    ServiceDescriptor.Singleton<IPostConfigureOptions<JwtBearerOptions>, ConfigureJwtBearerOptions>());
+
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -53,7 +60,6 @@ builder.Services.AddResponseCompression(opts =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.UseResponseCompression();
 
 if (app.Environment.IsDevelopment())
 {

@@ -34,11 +34,15 @@
                 <span class="fs-5 me-3">Followers: @UserProfileModel.Followers</span>
                 @if (LoggedInUserInfo != null && LoggedInUserInfo.UserName != Username)
                 {
-                    <button class="btn btn-primary"
+                    <button class="btn btn-primary me-2"
                     @onclick="() => (FollowOrUnfollowUser(UserProfileModel.UserName))">
                         @(UserProfileModel.IsFollowed ? "Unfollow" : "Follow")
                     </button>
+                    <a href="/messanger/@UserProfileModel.UserName" class="btn btn-primary">
+                        Message
+                    </a>
                 }
+
             </div>
         </div>
     }
@@ -91,7 +95,7 @@
         this.Posts = await postsService.LoadUserPostsAsync(Username);
         Console.WriteLine(UserProfileModel.BackgroundImagePath);
         StateHasChanged();
-    } 
+    }
 
     async Task<IEnumerable<PostInFeedViewModel>> GetItems(InfiniteScrollingItemsProviderRequest request)
     {

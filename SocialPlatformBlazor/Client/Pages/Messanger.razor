@@ -1,0 +1,159 @@
+﻿@page "/messanger/{username}"
+@page "/messanger"
+
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Microsoft.AspNetCore.SignalR.Client
+@using SocialPlatformBlazor.Client.Services
+@using SocialPlatformBlazor.Shared.ViewModels.Messages
+@using SocialPlatformBlazor.Shared.ViewModels.Users
+
+@inject UserService userService
+@inject IAccessTokenProvider tokenProvider
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS
+
+@implements IAsyncDisposable
+
+
+<div class="messanger-container" @ref="ContainerEl">
+    @if (Username == null)
+    {
+        <h3>Messanger</h3>
+    }
+    else
+    {
+        @foreach (var msg in messages)
+        {
+            @if (msg.SenderUsername == LoggedUserProfileData?.UserName)
+            {
+                <div class="container-chat darker d-flex flex-row-reverse">
+                    <div class="profile-img-container ms-3">
+                        <img src="@(LoggedUserProfileData?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")"
+                            class="profile-image" alt="Avatar">
+
+                    </div>
+                    <div class="message-info">
+                        <p>@msg.Message</p>
+                        <span class="time-left">@msg.SendAt.ToLocalTime()</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="container-chat d-flex">
+                    <div class="profile-img-container me-3">
+                        <img src="@(OtherUserData?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")"
+                            class="profile-image" alt="Avatar">
+                    </div>
+                    <div class="message-info">
+                        <p>@msg.Message</p>
+                        <span class="time-left">@msg.SendAt.ToLocalTime()</span>
+                    </div>
+                </div>
+            }
+        }
+    }
+</div>
+<div>
+    <textarea class="form-control mb-2"
+              @bind="MessageToSend" @bind:event="oninput"
+              placeholder="Send message..." @onkeydown="SendIfEnter">
+    </textarea>
+    <button class="btn btn-primary float-end" @onclick="Send" disabled="@(!IsConnected)">Send</button>
+</div>
+
+@code {
+    private HubConnection? hubConnection;
+
+    private List<MessageModel> messages = new List<MessageModel>();
+
+    [Parameter]
+    public string? Username { get; set; }
+
+    [CascadingParameter(Name = "UserData")]
+    public BaseUserInfoModel? LoggedUserProfileData { get; set; }
+
+    public UserProfileModel? OtherUserData { get; set; }
+
+    public string? MessageToSend { get; set; }
+
+    public ElementReference ContainerEl { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"), options =>
+            {
+                options.AccessTokenProvider = async () =>
+                {
+                    var result = await tokenProvider.RequestAccessToken();
+                    if (result.TryGetToken(out var token))
+                    {
+                        return token.Value;
+                    }
+                    else
+                    {
+                        return string.Empty;
+                    }
+                };
+            })
+            .WithAutomaticReconnect()
+            .Build();
+
+        hubConnection.On<MessageModel>("ReceiveMessage", async (messageModel) =>
+        {
+            messages.Add(messageModel);
+            StateHasChanged();
+            await ScrollToLastMessageAsync();
+        });
+
+        await hubConnection.StartAsync();
+    }
+    protected override async Task OnParametersSetAsync()
+    {
+        // If Other user data is not initialized make the request
+        // If Other user data is initialized but is not with the same username as the current address, make the request
+        if (OtherUserData is not null && Username == OtherUserData.UserName)
+        {
+            return;
+        }
+
+        this.OtherUserData = await userService.GetUserProfileAsync(Username);
+        StateHasChanged();
+    }
+
+
+    private async Task Send()
+    {
+        if (hubConnection is not null && !string.IsNullOrWhiteSpace(MessageToSend))
+        {
+            await hubConnection.SendAsync("SendMessage", Username, MessageToSend);
+            MessageToSend = string.Empty;
+        }
+    }
+
+    public async Task SendIfEnter(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await Send();
+        }
+    }
+
+    public bool IsConnected =>
+        hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection is not null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+
+    public async Task ScrollToLastMessageAsync()
+    {
+        await JS.InvokeVoidAsync("scrollToLastChild", ContainerEl);
+    }
+}

@@ -1,5 +1,5 @@
 ﻿.user-profile-images-container{
-    max-width: 800px;
+    max-width: 900px;
     margin: auto;
 }
 
@@ -9,7 +9,7 @@
 
 
 .background-image-container {
-    max-height: 325px;
+    max-height: 345px;
     overflow: hidden;
     border-left: 1px solid rgb(196, 196, 196);
     border-right: 1px solid rgb(196, 196, 196);

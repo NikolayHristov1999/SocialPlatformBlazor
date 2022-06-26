@@ -15,7 +15,6 @@
 <CascadingValue Value="@baseUserData" Name="UserData">
     <HeaderNav />
     <div class="page">
-
         <div class="sidebar col-md-3">
             <NavMenu />
         </div>
@@ -26,21 +25,12 @@
                         Hello, @context.User?.Identity?.Name!
                         <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
                     </Authorized>
-                    <NotAuthorized>
-                        <LoginDisplay />
-                        <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-                    </NotAuthorized>
                 </AuthorizeView>
             </div>
-
-
             <section id="content" class="mx-auto px-3">
-
                 @Body
             </section>
-
         </main>
-
         <div class="sidebar comm-sidebar col-md-3">
             <CommunicationSidebar />
         </div>
