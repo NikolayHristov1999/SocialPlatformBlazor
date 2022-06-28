@@ -20,5 +20,6 @@ namespace SocialPlatformBlazor.Server.Services.Interfaces
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<ApplicationUser?> GetUserByIdAsync(string userId);
+
     }
 }

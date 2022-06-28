@@ -9,9 +9,5 @@
         public string RecieverUsername { get; set; }
 
         public DateTime SendAt { get; set; }
-
-        public bool IsSeen { get; set; }
-
-        public DateTime SeenAt { get; set; }
     }
 }

@@ -49,6 +49,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddTransient<IUploadFileService, UploadFileService>();
 builder.Services.AddTransient<IUserManageService, UserManageService>();
 builder.Services.AddTransient<IPostsService, PostsService>();
+builder.Services.AddTransient<IMessagesService, MessagesService>();
 
 builder.Services.AddSignalR();
 builder.Services.AddResponseCompression(opts =>
