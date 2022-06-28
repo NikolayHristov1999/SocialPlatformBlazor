@@ -118,7 +118,7 @@ namespace SocialPlatformBlazor.Server.Services
                 post.Likes--;
             }
 
-            db.Posts.Update(post);
+            db.Posts.Update(post!);
             await db.SaveChangesAsync();
         }
 

@@ -10,7 +10,6 @@ namespace SocialPlatformBlazor.Client.Services
 
         public bool ShowingCreateNewPostDialog { get; set; } = false;
 
-        public int MyProperty { get; set; }
 
         public PostsService(HttpClient httpClient)
         {

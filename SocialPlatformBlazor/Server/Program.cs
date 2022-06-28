@@ -12,6 +12,7 @@ using SocialPlatformBlazor.Server.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
+using SocialPlatformBlazor.Server.Profiles;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -50,6 +51,8 @@ builder.Services.AddTransient<IUploadFileService, UploadFileService>();
 builder.Services.AddTransient<IUserManageService, UserManageService>();
 builder.Services.AddTransient<IPostsService, PostsService>();
 builder.Services.AddTransient<IMessagesService, MessagesService>();
+
+builder.Services.AddAutoMapper(typeof(UserProfile));
 
 builder.Services.AddSignalR();
 builder.Services.AddResponseCompression(opts =>

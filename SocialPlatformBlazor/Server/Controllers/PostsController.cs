@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SocialPlatformBlazor.Infrastructure;
 using SocialPlatformBlazor.Models;
@@ -14,13 +15,16 @@ namespace SocialPlatformBlazor.Server.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
+        private readonly IMapper mapper;
         private readonly IPostsService postsService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public PostsController(
+            IMapper mapper,
             IPostsService postsService,
             UserManager<ApplicationUser> _userManager)
         {
+            this.mapper = mapper;
             this.postsService = postsService;
             userManager = _userManager;
         }
@@ -35,21 +39,10 @@ namespace SocialPlatformBlazor.Server.Controllers
             foreach (var post in posts)
             {
                 var ownerUser = await userManager.FindByIdAsync(post.OwnerUserId);
-                postsModel.Add(new PostInFeedViewModel
-                {
-                    Id = post.Id,
-                    CreatedOn = post.CreatedOn,
-                    Description = post.Description,
-                    OwnerUserId = post.OwnerUserId,
-                    OwnerUserFullName = ownerUser.FirstName + " " + ownerUser.LastName,
-                    OwnerUserMainImagePath = ownerUser.MainImagePath,
-                    OwnerUserUsername = ownerUser.UserName,
-                    Likes = post.Likes,
-                    Shares = post.Shares,
-                    SharedPostId = post.SharedPostId,
-                    IsLiked =  (await postsService
-                        .IsPostLikedByUserAsync(post.Id, ClaimsPrincipalExtension.GetId(User)) != null),
-                });
+                var postInFeedModel = mapper.Map<PostInFeedViewModel>(post);
+                postInFeedModel.IsLiked = await postsService
+                        .IsPostLikedByUserAsync(post.Id, ClaimsPrincipalExtension.GetId(User)) != null;
+                postsModel.Add(postInFeedModel);
             }
 
             return postsModel;
@@ -76,11 +69,6 @@ namespace SocialPlatformBlazor.Server.Controllers
             return Ok();
         }
 
-        // PUT api/<PostsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         // DELETE api/<PostsController>/5
         [HttpDelete("{id}")]
