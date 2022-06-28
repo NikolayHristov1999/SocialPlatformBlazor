@@ -5,6 +5,43 @@
     {
       "library": "font-awesome@6.1.1",
       "destination": "wwwroot/lib/font-awesome/"
+    },
+    {
+      "library": "tinymce@6.0.3",
+      "destination": "wwwroot/lib/tinymce/",
+      "files": [
+        "tinymce.min.js",
+        "icons/default/icons.min.js",
+        "plugins/wordcount/plugin.js",
+        "plugins/wordcount/plugin.min.js",
+        "plugins/table/plugin.js",
+        "plugins/table/plugin.min.js",
+        "models/dom/model.min.js",
+        "plugins/anchor/plugin.js",
+        "plugins/anchor/plugin.min.js",
+        "plugins/autosave/plugin.js",
+        "plugins/autosave/plugin.min.js",
+        "plugins/code/plugin.js",
+        "plugins/code/plugin.min.js",
+        "plugins/image/plugin.js",
+        "plugins/image/plugin.min.js",
+        "plugins/link/plugin.js",
+        "plugins/link/plugin.min.js",
+        "plugins/media/plugin.js",
+        "plugins/media/plugin.min.js",
+        "plugins/pagebreak/plugin.js",
+        "plugins/pagebreak/plugin.min.js",
+        "plugins/save/plugin.js",
+        "plugins/save/plugin.min.js",
+        "plugins/template/plugin.js",
+        "plugins/template/plugin.min.js",
+        "skins/content/default/content.min.css",
+        "skins/ui/oxide/content.inline.min.css",
+        "skins/ui/oxide/content.min.css",
+        "skins/ui/oxide/skin.min.css",
+        "skins/ui/oxide/skin.shadowdom.min.css",
+        "themes/silver/theme.min.js"
+      ]
     }
   ]
 }

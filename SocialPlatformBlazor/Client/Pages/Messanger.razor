@@ -15,13 +15,14 @@
 @implements IAsyncDisposable
 
 
-<div class="messanger-container" @ref="ContainerEl">
-    @if (Username == null)
-    {
-        <h3>Messanger</h3>
-    }
-    else
-    {
+
+@if (Username == null)
+{
+    <h3>All Chats</h3>
+}
+else
+{
+    <div class="messanger-container" @ref="ContainerEl">
         @foreach (var msg in messages)
         {
             @if (msg.SenderUsername == LoggedUserProfileData?.UserName)
@@ -29,7 +30,7 @@
                 <div class="container-chat darker d-flex flex-row-reverse">
                     <div class="profile-img-container ms-3">
                         <img src="@(LoggedUserProfileData?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")"
-                            class="profile-image" alt="Avatar">
+                 class="profile-image" alt="Avatar">
 
                     </div>
                     <div class="message-info">
@@ -43,7 +44,7 @@
                 <div class="container-chat d-flex">
                     <div class="profile-img-container me-3">
                         <img src="@(OtherUserData?.MainImagePath ?? "/images/blank-profile-picture-973460_1280.png")"
-                            class="profile-image" alt="Avatar">
+                 class="profile-image" alt="Avatar">
                     </div>
                     <div class="message-info">
                         <p>@msg.Message</p>
@@ -52,17 +53,25 @@
                 </div>
             }
         }
-    }
-</div>
-<div>
-    <textarea class="form-control mb-2"
+    </div>
+    <div>
+        <textarea class="form-control mb-2"
               @bind="MessageToSend" @bind:event="oninput"
               placeholder="Send message..." @onkeydown="SendIfEnter">
-    </textarea>
-    <button class="btn btn-primary float-end" @onclick="Send" disabled="@(!IsConnected)">Send</button>
-</div>
+                        </textarea>
+        <button class="btn btn-primary float-end" @onclick="Send" disabled="@(!IsConnected)">Send</button>
+    </div>
+}
+
+
 
 @code {
+    /// <summary>
+    ///     Refactor the code(too large)
+    /// </summary>
+    ///
+
+
     private HubConnection? hubConnection;
 
     private List<MessageModel> messages = new List<MessageModel>();

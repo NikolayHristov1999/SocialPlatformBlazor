@@ -29,6 +29,8 @@ namespace SocialPlatformBlazor.Server.Data
 
         public DbSet<UserFollower> UsersFollowers { get; set; }
 
+        public DbSet<Message> Messages { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //Candidate keys initializing
@@ -52,6 +54,18 @@ namespace SocialPlatformBlazor.Server.Data
                 .HasOne(x => x.Follower)
                 .WithMany(x => x.Following)
                 .HasForeignKey(x => x.FollowerId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Message>()
+                .HasOne(x => x.FromUser)
+                .WithMany(x => x.SentMessages)
+                .HasForeignKey(x => x.FromUserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Message>()
+                .HasOne(x => x.ToUser)
+                .WithMany(x => x.RecievedMessages)
+                .HasForeignKey(x => x.ToUserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
 

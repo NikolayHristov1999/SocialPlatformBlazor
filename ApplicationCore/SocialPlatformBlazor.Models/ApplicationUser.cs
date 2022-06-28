@@ -60,5 +60,9 @@ namespace SocialPlatformBlazor.Models
 
         public virtual ICollection<UserFollower> Following { get; set; }
 
+        public virtual ICollection<Message> SentMessages { get; set; }
+
+        public virtual ICollection<Message> RecievedMessages { get; set; }
+
     }
 }
