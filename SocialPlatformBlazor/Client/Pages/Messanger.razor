@@ -25,7 +25,7 @@ else
     <div class="messanger-container" @ref="ContainerEl">
         @foreach (var msg in messages)
         {
-            @if (msg.SenderUsername == LoggedUserProfileData?.UserName)
+            @if (msg.FromUserUsername == LoggedUserProfileData?.UserName)
             {
                 <div class="container-chat darker d-flex flex-row-reverse">
                     <div class="profile-img-container ms-3">
@@ -34,8 +34,8 @@ else
 
                     </div>
                     <div class="message-info">
-                        <p>@msg.Message</p>
-                        <span class="time-left">@msg.SendAt.ToLocalTime()</span>
+                        <p>@msg.Text</p>
+                        <span class="time-left">@msg.CreatedOn.ToLocalTime()</span>
                     </div>
                 </div>
             }
@@ -47,8 +47,8 @@ else
                  class="profile-image" alt="Avatar">
                     </div>
                     <div class="message-info">
-                        <p>@msg.Message</p>
-                        <span class="time-left">@msg.SendAt.ToLocalTime()</span>
+                        <p>@msg.Text</p>
+                        <span class="time-left">@msg.CreatedOn.ToLocalTime()</span>
                     </div>
                 </div>
             }

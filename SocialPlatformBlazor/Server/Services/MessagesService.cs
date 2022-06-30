@@ -31,7 +31,6 @@ namespace SocialPlatformBlazor.Server.Services
                 Text = text,
                 FromUserId = fromUserId,
                 ToUserId = toUserId,
-                CreatedOn = DateTime.UtcNow,
             };
 
             await db.Messages.AddAsync(message);

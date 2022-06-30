@@ -53,6 +53,13 @@ namespace SocialPlatformBlazor.Server.Services.Interfaces
         /// <returns></returns>
         Task LikePostAsync(string id, string userId);
 
+
+        /// <summary>
+        ///     Search db for a post liked by a user
+        /// </summary>
+        /// <param name="postId">Id of the post</param>
+        /// <param name="userId">Id of the user</param>
+        /// <returns>PostLike model if found or null</returns>
         Task<PostLike?> IsPostLikedByUserAsync(string postId, string userId);
     }
 }

@@ -2,12 +2,12 @@
 {
     public class MessageModel
     {
-        public string Message { get; set; }
+        public string Text { get; set; }
 
-        public string SenderUsername { get; set; }
+        public string FromUserUsername { get; set; }
 
-        public string RecieverUsername { get; set; }
+        public string ToUserUsername { get; set; }
 
-        public DateTime SendAt { get; set; }
+        public DateTime CreatedOn { get; set; }
     }
 }

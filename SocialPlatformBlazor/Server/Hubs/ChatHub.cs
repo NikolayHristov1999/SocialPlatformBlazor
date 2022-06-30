@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
-using SocialPlatformBlazor.Infrastructure;
 using SocialPlatformBlazor.Models;
 using SocialPlatformBlazor.Server.Services.Interfaces;
 using SocialPlatformBlazor.Shared.ViewModels.Messages;
-using System.Security.Claims;
 
 namespace SocialPlatformBlazor.Server.Hubs
 {
@@ -13,15 +12,19 @@ namespace SocialPlatformBlazor.Server.Hubs
     public class ChatHub : Hub
     {
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly IMapper mapper;
         private readonly IMessagesService messagesService;
 
         public ChatHub(
             UserManager<ApplicationUser> _userManager,
+            IMapper mapper,
             IMessagesService messagesService)
         {
             userManager = _userManager;
+            this.mapper = mapper;
             this.messagesService = messagesService;
         }
+
         public async Task SendMessage(string recieverUsername, string text)
         {
             var user = await userManager.FindByIdAsync(Context.UserIdentifier);
@@ -33,13 +36,7 @@ namespace SocialPlatformBlazor.Server.Hubs
             }
 
             var message = await messagesService.AddMessageAsync(text, user.Id, reciever.Id);
-            var messageModel = new MessageModel()
-            {
-                RecieverUsername = recieverUsername,
-                SenderUsername = user.UserName,
-                Message = text,
-                SendAt = DateTime.UtcNow
-            };
+            var messageModel = mapper.Map<MessageModel>(message);
 
             
             await Clients.User(reciever.Id).SendAsync("ReceiveMessage", messageModel);

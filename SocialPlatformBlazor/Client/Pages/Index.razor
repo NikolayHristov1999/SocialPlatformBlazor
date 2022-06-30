@@ -10,12 +10,6 @@
 
 <div class="newsfeed">
     <PageTitle>SPB - Newsfeed</PageTitle>
-
-    <h1>Hello, world!</h1>
-
-    Welcome to your new app.
-
-    <SurveyPrompt Title="How is Blazor working for you?" />
     @if (Posts != null)
     {
         @foreach (var post in Posts)
@@ -39,14 +33,6 @@
 
     private IEnumerable<PostInFeedViewModel>? Posts { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        Posts = await postsService.LoadPostsAsync();
-        if (Posts != null)
-        {
-            currentLastPost += loadPostsCount;
-        }
-    }
 
     async Task<IEnumerable<PostInFeedViewModel>> GetItems(InfiniteScrollingItemsProviderRequest request)
     {
